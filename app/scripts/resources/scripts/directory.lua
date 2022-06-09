@@ -226,7 +226,7 @@
 --define prompt_for_name function
 	function prompt_for_name()
 		dtmf_digits = "";
-		min_digits=0; max_digits=3; max_tries=3; digit_timeout = "5000";
+		min_digits=0; max_digits=4; max_tries=3; digit_timeout = "5000";
 		directory_prompt = directory_prompt or sounds_dir.."/directory/dir-enter_person_first_or_last.wav";
 		session:setVariable("read_terminator_used", "");
 		
@@ -250,7 +250,7 @@
 			dtmf_digits = prompt_for_name();
 
 		--show the dtmf digits
-			freeswitch.consoleLog("notice", "[directory] first 3 letters of first or last name: " .. dtmf_digits .. "\n");
+			freeswitch.consoleLog("notice", "[directory] first 1-4 letters of first or last name: " .. dtmf_digits .. "\n");
 
 		--loop through the extensions to find matches
 			search_dtmf_digits = dtmf_digits;
@@ -263,7 +263,7 @@
 				--	freeswitch.consoleLog("notice", "[directory] ext: " .. row.extension .. " context " .. row.context .. "\n");
 				--end
 
-				if (search_dtmf_digits == row.last_name_digits) or (search_dtmf_digits == row.first_name_digits) then
+				if (search_dtmf_digits == string.sub(row.last_name_digits,1,string.len(search_dtmf_digits))) or (search_dtmf_digits == string.sub(row.first_name_digits,1,string.len(search_dtmf_digits))) then
 					if (row.first_name) then
 						--play the recorded name
 							if (storage_type == "base64") then
@@ -408,13 +408,13 @@
 			if (first_name) then
 				if (string.len(first_name) > 0) then
 					--freeswitch.consoleLog("notice", "[directory] first_name: --" .. first_name .. "--\n");
-					first_name_digits = dialpad_to_digit(string.sub(first_name, 1, 1))..dialpad_to_digit(string.sub(first_name, 2, 2))..dialpad_to_digit(string.sub(first_name, 3, 3));
+					first_name_digits = dialpad_to_digit(string.sub(first_name, 1, 1))..dialpad_to_digit(string.sub(first_name, 2, 2))..dialpad_to_digit(string.sub(first_name, 3, 3))..dialpad_to_digit(string.sub(first_name, 4, 4));
 				end
 			end
 			if (last_name) then
 				if (string.len(last_name) > 0) then
 					--freeswitch.consoleLog("notice", "[directory] last_name: --" .. last_name .. "--\n");
-					last_name_digits = dialpad_to_digit(string.sub(last_name, 1, 1))..dialpad_to_digit(string.sub(last_name, 2, 2))..dialpad_to_digit(string.sub(last_name, 3, 3));
+					last_name_digits = dialpad_to_digit(string.sub(last_name, 1, 1))..dialpad_to_digit(string.sub(last_name, 2, 2))..dialpad_to_digit(string.sub(last_name, 3, 3))..dialpad_to_digit(string.sub(last_name, 4, 4));
 				end
 			end
 
